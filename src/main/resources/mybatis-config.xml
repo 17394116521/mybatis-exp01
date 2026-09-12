@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC
+        "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 开启驼峰命名自动映射，数据库 emp_name 自动映射到实体类 empName -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 使用log4j输出SQL日志 -->
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+    <!-- 实体类别名，Mapper.xml直接写Emp -->
+    <typeAliases>
+        <package name="com.lab.entity"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <!-- 重点：所有&替换成&amp;，解决XML报错 -->
+                <property name="url" value="jdbc:mysql://localhost:3306/ssm_emp?useSSL=false&amp;serverTimezone=Asia/Shanghai&amp;characterEncoding=utf8"/>
+                <property name="username" value="root"/>
+                <!-- 自己的MySQL的密码 -->
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 扫描mapper接口 -->
+    <mappers>
+        <package name="com.lab.mapper"/>
+    </mappers>
+</configuration>
