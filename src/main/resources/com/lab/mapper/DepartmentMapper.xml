@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.mapper.DepartmentMapper">
+    <!-- 一对多结果映射：部门 + 下属员工集合 -->
+    <resultMap id="deptEmpMap" type="Department">
+        <id column="dept_id" property="deptId"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="location" property="location"/>
+        <!-- 一对多 collection 集合映射 -->
+        <collection property="empList" ofType="Employee">
+            <id column="emp_id" property="empId"/>
+            <result column="emp_name" property="empName"/>
+            <result column="job_title" property="jobTitle"/>
+            <result column="salary" property="salary"/>
+        </collection>
+    </resultMap>
+
+    <select id="getDeptWithEmpById" resultMap="deptEmpMap">
+        SELECT d.*, e.*
+        FROM department d
+                 LEFT JOIN employee e ON d.dept_id = e.dept_id
+        WHERE d.dept_id = #{deptId}
+    </select>
+</mapper>

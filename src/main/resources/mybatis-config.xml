@@ -21,7 +21,7 @@
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
                 <!-- 重点：所有&替换成&amp;，解决XML报错 -->
-                <property name="url" value="jdbc:mysql://localhost:3306/ssm_emp?useSSL=false&amp;serverTimezone=Asia/Shanghai&amp;characterEncoding=utf8"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis_multi?useSSL=false&amp;serverTimezone=Asia/Shanghai&amp;characterEncoding=utf8"/>
                 <property name="username" value="root"/>
                 <!-- 自己的MySQL的密码 -->
                 <property name="password" value="root"/>
