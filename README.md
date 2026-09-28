@@ -36,3 +36,5 @@ AI对话截图：
 
 ## ✅ 实验结果
 MyBatis环境搭建成功，CRUD全部功能正常；GitHub保存完整代码提交时间线。
+
+6. commit6：添加docs目录，上传AI辅助实验对话截图，更新README文档
