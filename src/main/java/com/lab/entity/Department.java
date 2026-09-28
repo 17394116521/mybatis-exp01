@@ -1,11 +1,16 @@
 package com.lab.entity;
 
 import java.util.List;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 /**
- * 部门实体类，一对多关系：一个部门对应多个员工
+ * 部门实体类，一对多关系：一个部门对应多个员工 对应department表，MyBatis-Plus注解
  */
+@TableName("department") // 映射数据库表名
 public class Department {
+
+    @TableId(type = IdType.AUTO) // 主键自增
     private Integer deptId;         //部门编号，主键
     private String deptName;        //部门名称
     private String location;        //部门办公地点

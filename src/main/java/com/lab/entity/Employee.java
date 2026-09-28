@@ -1,12 +1,17 @@
 package com.lab.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 员工实体类，多对一关系：多个员工属于同一个部门
+ * 员工实体类，多对一关系：多个员工属于同一个部门 对应employee表，MyBatis-Plus注解
  */
+@TableName("employee")
 public class Employee {
+    @TableId(type = IdType.AUTO) // 主键自增
     private Integer empId;          //员工编号，主键
     private String empName;         //员工姓名
     private String jobTitle;        //岗位职位

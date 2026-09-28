@@ -1,13 +1,12 @@
 package com.lab.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lab.entity.Department;
-import org.apache.ibatis.annotations.Param;
 
-public interface DepartmentMapper {
-    /**
-     * 根据部门id查询部门，同时查询部门下所有员工（一对多）
-     * @param deptId 部门编号
-     * @return 部门对象（包含员工集合）
-     */
-    Department getDeptWithEmpById(@Param("deptId") Integer deptId);
+/**
+ * MyBatis-Plus Mapper，继承BaseMapper自动获得增删改查
+ */
+public interface DepartmentMapper extends BaseMapper<Department> {
+    Department getDeptWithEmpById(int i);
+    // 原来手写的多表关联方法保留，MP自动新增基础CRUD，不需要写XML基础SQL
 }

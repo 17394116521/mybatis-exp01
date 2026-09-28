@@ -29,18 +29,10 @@ public class MultiTableTest {
      * 多对一测试：查询全部员工附带部门
      */
     @Test
-    public void testListEmpWithDept(){
-        try(SqlSession session = MyBatisUtil.openSession()){
-            EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
-            List<Employee> empList = mapper.listEmpWithDept();
-            empList.forEach(System.out::println);
-        }
-    }
 
     /**
      * 一对多测试：查询部门，带出该部门所有员工
      */
-    @Test
     public void testDeptWithEmp(){
         try(SqlSession session = MyBatisUtil.openSession()){
             DepartmentMapper mapper = session.getMapper(DepartmentMapper.class);

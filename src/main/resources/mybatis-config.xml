@@ -29,8 +29,9 @@
         </environment>
     </environments>
 
-    <!-- 扫描mapper接口 -->
+    <!-- 包扫描，自动注册mapper，MP推荐写法 -->
     <mappers>
         <package name="com.lab.mapper"/>
     </mappers>
+
 </configuration>
