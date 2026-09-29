@@ -136,4 +136,14 @@
         </where>
     </select>
 
+    <!--分页查询-->
+    <select id="selectPageEmp" resultMap="empMap">
+        SELECT <include refid="allColumns"/> FROM emp LIMIT #{pageStart},#{pageSize}
+    </select>
+    <!--统计总记录数-->
+    <select id="selectEmpTotal" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM emp
+    </select>
+
+
 </mapper>

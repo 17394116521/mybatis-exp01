@@ -40,4 +40,14 @@ public interface EmpMapper {
      * 优先按姓名精确查询；姓名为空，则按部门查询；都空，查询全部
      */
     List<Emp> selectChoose(Emp emp);
+
+    /**
+     * 任务4 手写分页查询
+     */
+    List<Emp> selectPageEmp(@Param("pageStart") int pageStart, @Param("pageSize") int pageSize);
+
+    /**
+     * 任务4 统计总记录数
+     */
+    Long selectEmpTotal();
 }

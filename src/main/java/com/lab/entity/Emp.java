@@ -1,10 +1,17 @@
 package com.lab.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@TableName("emp")
 public class Emp {
+    @TableId(type = IdType.AUTO) // 主键自增，MP内置方法需要此注解
     private Integer empId;
+    @TableField("emp_name")
     private String empName;
     private String gender;
     private String dept;
