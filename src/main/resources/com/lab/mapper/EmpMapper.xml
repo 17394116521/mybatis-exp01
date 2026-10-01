@@ -145,5 +145,11 @@
         SELECT COUNT(*) FROM emp
     </select>
 
+    <select id="selectPage" resultMap="empMap">
+        SELECT emp_id,emp_name,gender,dept,post,salary,hire_date,status
+        FROM emp
+    </select>
+
+
 
 </mapper>

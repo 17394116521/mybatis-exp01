@@ -1,5 +1,7 @@
 package com.lab.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lab.entity.Emp;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -50,4 +52,10 @@ public interface EmpMapper {
      * 任务4 统计总记录数
      */
     Long selectEmpTotal();
+
+    /**
+     * MyBatis-Plus分页查询
+     */
+    IPage<Emp> selectPage(Page<Emp> page, @Param("query") Emp emp);
+
 }
