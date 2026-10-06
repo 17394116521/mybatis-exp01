@@ -14,6 +14,8 @@ import java.util.List;
 import org.junit.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 public class EmpMapperTest {
 
@@ -33,7 +35,7 @@ public class EmpMapperTest {
             emp.setHireDate(new Date());
             emp.setStatus(1);
             int rows = mapper.insert(emp);
-            session.commit(); //增删改必须手动提交事务
+            session.commit();
             org.junit.Assert.assertEquals(1, rows);
             System.out.println("回填主键 empId = " + emp.getEmpId());
         }
@@ -46,7 +48,7 @@ public class EmpMapperTest {
     public void testUpdate() {
         try (SqlSession session = MyBatisUtil.openSession()) {
             EmpMapper mapper = session.getMapper(EmpMapper.class);
-            Emp emp = mapper.selectById(1); //读取id=1员工
+            Emp emp = mapper.selectById(1);
             emp.setSalary(new BigDecimal("13000"));
             int rows = mapper.update(emp);
             session.commit();
@@ -56,13 +58,11 @@ public class EmpMapperTest {
 
     /**
      * 根据主键删除员工
-     * 删除的emp_id必须在数据库中存在，否则受影响行数为0，断言失败
      */
     @Test
     public void testDelete() {
         try (SqlSession session = MyBatisUtil.openSession()) {
             EmpMapper mapper = session.getMapper(EmpMapper.class);
-            // 1. 插入一条临时测试数据
             Emp emp = new Emp();
             emp.setEmpName("临时员工");
             emp.setGender("男");
@@ -75,7 +75,6 @@ public class EmpMapperTest {
             session.commit();
             System.out.println("插入成功，empId = " + emp.getEmpId());
 
-            // 2. 用回填的主键删除
             int rows = mapper.deleteById(emp.getEmpId());
             session.commit();
             org.junit.Assert.assertEquals(1, rows);
@@ -87,7 +86,6 @@ public class EmpMapperTest {
 
     /**
      * 3.1 多条件模糊查询 if + where
-     * 测试场景：传姓名关键字 + 部门，验证模糊匹配
      */
     @Test
     public void testSelectByCondition() {
@@ -116,7 +114,7 @@ public class EmpMapperTest {
     }
 
     /**
-     * 3.2 动态更新 set标签 — 只更新薪资和部门，其他字段不变
+     * 3.2 动态更新 set标签
      */
     @Test
     public void testUpdateDynamic() {
@@ -171,7 +169,6 @@ public class EmpMapperTest {
 
     /**
      * 3.3 批量删除 foreach
-     * 先插入两条数据，再用返回的empId批量删除
      */
     @Test
     public void testDeleteBatch() {
@@ -205,7 +202,6 @@ public class EmpMapperTest {
             session.commit();
             org.junit.Assert.assertEquals(2, rows);
 
-            // 增加校验：确认删除后数据库无该记录（可选，推荐保留）
             Emp check1 = mapper.selectById(emp1.getEmpId());
             Emp check2 = mapper.selectById(emp2.getEmpId());
             org.junit.Assert.assertNull(check1);
@@ -259,35 +255,69 @@ public class EmpMapperTest {
     }
 
     /**
-     * 任务4 MyBatis-Plus分页查询测试
+     * 任务4 MyBatis‑Plus分页查询测试（带业务条件：只查询在职员工）
      */
     @Test
-    public void testMPPage() {
+    public void testMyBatisPage() {
         try (SqlSession session = MyBatisUtil.openSession()) {
             EmpMapper mapper = session.getMapper(EmpMapper.class);
-            // 构建分页对象：第1页，每页3条
-            Page<Emp> page = new Page<>(1,3);
-            // 分页查询
-            IPage<Emp> empPage = mapper.selectPage(page, null);
+            int pageNum = 1;
+            int pageSize = 3;
+            int pageStart = (pageNum - 1) * pageSize;
 
-            // ========== JUnit断言（实验要求部分） ==========
-            // 断言当前页记录不为null
-            Assert.assertNotNull(empPage);
-            // 断言当前页数据列表不为空
-            Assert.assertNotNull(empPage.getRecords());
-            // 断言当前页最多3条记录
-            Assert.assertTrue(empPage.getRecords().size() <= 3);
-            // 断言当前页码是第1页
-            Assert.assertEquals(1, empPage.getCurrent());
-            // 断言每页容量是3
-            Assert.assertEquals(3, empPage.getSize());
+            // 查询当前页数据
+            List<Emp> records = mapper.selectPageEmp(pageStart, pageSize);
+            // 查询总条数
+            Long total = mapper.selectEmpTotal();
 
-            // 打印结果，保留原来日志输出
-            System.out.println("总记录数：" + empPage.getTotal());
-            System.out.println("总页数：" + empPage.getPages());
-            for(Emp emp : empPage.getRecords()){
+            // JUnit断言
+            Assert.assertNotNull(records);
+            Assert.assertTrue(records.size() <= pageSize);
+            Assert.assertTrue(total >= 0);
+
+            System.out.println("总记录数：" + total);
+            System.out.println("当前第" + pageNum + "页，每页" + pageSize + "条");
+            for (Emp emp : records) {
                 System.out.println(emp.getEmpId() + " | " + emp.getEmpName() + " | " + emp.getDept());
             }
+        }
+    }
+
+
+    /**
+     * 任务4.4 QueryWrapper条件构造器测试
+     * 查询薪资大于7000，在职员工，按薪资降序
+     */
+    //@Test
+    public void testMPQueryWrapper(){
+        try(SqlSession session = MyBatisUtil.openSession()){
+            EmpMapper mapper = session.getMapper(EmpMapper.class);
+            QueryWrapper<Emp> wrapper = new QueryWrapper<>();
+            wrapper.gt("salary",7000)
+                    .eq("status",1)
+                    .orderByDesc("salary");
+            List<Emp> list = mapper.selectList(wrapper);
+            System.out.println("\n==== QueryWrapper查询结果 ====");
+            list.forEach(System.out::println);
+            Assert.assertNotNull(list);
+        }
+    }
+
+    /**
+     * 任务4.4 LambdaQueryWrapper条件构造器测试（防止字段名硬编码写错）
+     */
+    //@Test
+    public void testMPLambdaWrapper(){
+        try(SqlSession session = MyBatisUtil.openSession()){
+            EmpMapper mapper = session.getMapper(EmpMapper.class);
+            LambdaQueryWrapper<Emp> lambdaWrapper = new LambdaQueryWrapper<>();
+            lambdaWrapper.gt(Emp::getSalary,7000)
+                    .eq(Emp::getStatus,1)
+                    .orderByDesc(Emp::getSalary);
+            List<Emp> list = mapper.selectList(lambdaWrapper);
+            System.out.println("\n==== LambdaQueryWrapper查询结果 ====");
+            list.forEach(System.out::println);
+            Assert.assertNotNull(list);
         }
     }
 

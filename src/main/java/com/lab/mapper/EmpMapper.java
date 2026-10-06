@@ -1,22 +1,26 @@
 package com.lab.mapper;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lab.entity.Emp;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
-public interface EmpMapper {
+// 重点：继承 BaseMapper<Emp>，MP自带 selectPage、selectList 等方法
+public interface EmpMapper extends BaseMapper<Emp> {
 
-    //===== 基础CRUD方法 =====
+    //===== 手写MyBatis基础CRUD（自己XML实现，保留）=====
     Emp selectById(Integer empId);
+
     int insert(Emp emp);
+
     int update(Emp emp);
+
     int deleteById(Integer empId);
 
     List<Emp> selectAll();
 
     //========= 任务3 动态SQL新增方法 =========
+
     /**
      * 3.1 多条件模糊查询 if + where
      */
@@ -44,18 +48,13 @@ public interface EmpMapper {
     List<Emp> selectChoose(Emp emp);
 
     /**
-     * 任务4 手写分页查询
+     * 任务4 原生MyBatis手写分页（拓展，保留）
      */
     List<Emp> selectPageEmp(@Param("pageStart") int pageStart, @Param("pageSize") int pageSize);
 
     /**
-     * 任务4 统计总记录数
+     * 任务4 统计总记录数（原生MyBatis手写分页，保留）
      */
     Long selectEmpTotal();
-
-    /**
-     * MyBatis-Plus分页查询
-     */
-    IPage<Emp> selectPage(Page<Emp> page, @Param("query") Emp emp);
 
 }

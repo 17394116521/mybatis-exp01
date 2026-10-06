@@ -136,20 +136,13 @@
         </where>
     </select>
 
-    <!--分页查询-->
+    <!--分页查询（原生MyBatis手写分页，保留，任务拓展）-->
     <select id="selectPageEmp" resultMap="empMap">
         SELECT <include refid="allColumns"/> FROM emp LIMIT #{pageStart},#{pageSize}
     </select>
-    <!--统计总记录数-->
+    <!--统计总记录数（原生MyBatis手写分页，保留）-->
     <select id="selectEmpTotal" resultType="java.lang.Long">
         SELECT COUNT(*) FROM emp
     </select>
-
-    <select id="selectPage" resultMap="empMap">
-        SELECT emp_id,emp_name,gender,dept,post,salary,hire_date,status
-        FROM emp
-    </select>
-
-
 
 </mapper>
