@@ -2,6 +2,7 @@ package com.lab.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lab.entity.Emp;
+import com.lab.entity.Employee;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -56,5 +57,8 @@ public interface EmpMapper extends BaseMapper<Emp> {
      * 任务4 统计总记录数（原生MyBatis手写分页，保留）
      */
     Long selectEmpTotal();
+
+    // 根据员工id查询员工，同时带出所属部门信息【多对一】
+    Employee findEmpWithDeptById(@Param("empId") Integer empId);
 
 }
