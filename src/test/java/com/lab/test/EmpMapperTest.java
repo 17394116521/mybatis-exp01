@@ -20,14 +20,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 public class EmpMapperTest {
 
     /**
-     * 新增员工测试，自动回填主键
+     * 新增员工测试，自动回填主键（末尾rollback，不污染基础数据）
      */
     @Test
     public void testInsert() {
         try (SqlSession session = MyBatisUtil.openSession()) {
             EmpMapper mapper = session.getMapper(EmpMapper.class);
             Emp emp = new Emp();
-            emp.setEmpName("陈晨");
+            emp.setEmpName("临时测试人员");
             emp.setGender("女");
             emp.setDept("研发部");
             emp.setPost("测试工程师");
@@ -35,9 +35,10 @@ public class EmpMapperTest {
             emp.setHireDate(new Date());
             emp.setStatus(1);
             int rows = mapper.insert(emp);
-            session.commit();
+            // 移除 commit！改为rollback
             org.junit.Assert.assertEquals(1, rows);
             System.out.println("回填主键 empId = " + emp.getEmpId());
+            session.rollback();
         }
     }
 
@@ -51,8 +52,9 @@ public class EmpMapperTest {
             Emp emp = mapper.selectById(1);
             emp.setSalary(new BigDecimal("13000"));
             int rows = mapper.update(emp);
-            session.commit();
             org.junit.Assert.assertEquals(1, rows);
+            System.out.println("更新影响行数："+rows);
+            session.rollback();
         }
     }
 
@@ -72,18 +74,16 @@ public class EmpMapperTest {
             emp.setHireDate(new Date());
             emp.setStatus(1);
             mapper.insert(emp);
-            session.commit();
             System.out.println("插入成功，empId = " + emp.getEmpId());
 
             int rows = mapper.deleteById(emp.getEmpId());
-            session.commit();
             org.junit.Assert.assertEquals(1, rows);
             System.out.println("删除成功，empId = " + emp.getEmpId());
+            session.rollback();
         }
     }
 
     //========= 任务3：动态SQL单元测试 =========
-
     /**
      * 3.1 多条件模糊查询 if + where
      */
@@ -92,8 +92,8 @@ public class EmpMapperTest {
         try (SqlSession session = MyBatisUtil.openSession()) {
             EmpMapper mapper = session.getMapper(EmpMapper.class);
             Emp condition = new Emp();
-            condition.setEmpName("陈");
-            condition.setDept("研发部");
+            condition.setEmpName("苏"); // 修改为表里存在的"苏沐瑶"
+            condition.setDept("技术部");
             List<Emp> list = mapper.selectByCondition(condition);
             System.out.println("查询结果数量：" + list.size());
             list.forEach(System.out::println);
@@ -125,11 +125,11 @@ public class EmpMapperTest {
             emp.setSalary(new BigDecimal("15000"));
             emp.setDept("技术部");
             int rows = mapper.updateDynamic(emp);
-            session.commit();
             System.out.println("动态更新影响行数：" + rows);
 
             Emp updated = mapper.selectById(1);
             System.out.println("更新后：" + updated);
+            session.rollback();
         }
     }
 
@@ -142,28 +142,28 @@ public class EmpMapperTest {
             EmpMapper mapper = session.getMapper(EmpMapper.class);
 
             Emp emp1 = new Emp();
-            emp1.setEmpName("张三");
+            emp1.setEmpName("临时A");
             emp1.setGender("男");
-            emp1.setDept("市场部");
-            emp1.setPost("销售");
+            emp1.setDept("临时部");
+            emp1.setPost("临时岗");
             emp1.setSalary(new BigDecimal("8000"));
             emp1.setHireDate(new Date());
             emp1.setStatus(1);
 
             Emp emp2 = new Emp();
-            emp2.setEmpName("李四");
+            emp2.setEmpName("临时B");
             emp2.setGender("女");
-            emp2.setDept("财务部");
-            emp2.setPost("会计");
+            emp2.setDept("临时部");
+            emp2.setPost("临时岗");
             emp2.setSalary(new BigDecimal("7500"));
             emp2.setHireDate(new Date());
             emp2.setStatus(1);
 
             List<Emp> emps = Arrays.asList(emp1, emp2);
             int rows = mapper.insertBatch(emps);
-            session.commit();
             org.junit.Assert.assertEquals(2, rows);
             System.out.println("批量插入成功，影响行数：" + rows);
+            session.rollback();
         }
     }
 
@@ -195,11 +195,9 @@ public class EmpMapperTest {
 
             mapper.insert(emp1);
             mapper.insert(emp2);
-            session.commit();
 
             List<Integer> ids = Arrays.asList(emp1.getEmpId(), emp2.getEmpId());
             int rows = mapper.deleteBatch(ids);
-            session.commit();
             org.junit.Assert.assertEquals(2, rows);
 
             Emp check1 = mapper.selectById(emp1.getEmpId());
@@ -208,6 +206,7 @@ public class EmpMapperTest {
             org.junit.Assert.assertNull(check2);
 
             System.out.println("批量删除成功，影响行数：" + rows);
+            session.rollback();
         }
     }
 
@@ -219,7 +218,7 @@ public class EmpMapperTest {
         try (SqlSession session = MyBatisUtil.openSession()) {
             EmpMapper mapper = session.getMapper(EmpMapper.class);
             Emp condition = new Emp();
-            condition.setEmpName("陈晨");
+            condition.setEmpName("苏沐瑶"); // 库中真实存在的名字
             List<Emp> list = mapper.selectChoose(condition);
             System.out.println("按姓名查询结果：" + list.size());
             list.forEach(System.out::println);
@@ -234,7 +233,7 @@ public class EmpMapperTest {
         try (SqlSession session = MyBatisUtil.openSession()) {
             EmpMapper mapper = session.getMapper(EmpMapper.class);
             Emp condition = new Emp();
-            condition.setDept("研发部");
+            condition.setDept("技术部");
             List<Emp> list = mapper.selectChoose(condition);
             System.out.println("按部门查询结果：" + list.size());
             list.forEach(System.out::println);
@@ -283,7 +282,6 @@ public class EmpMapperTest {
         }
     }
 
-
     /**
      * 任务4.4 QueryWrapper条件构造器测试
      * 查询薪资大于7000，在职员工，按薪资降序
@@ -320,5 +318,4 @@ public class EmpMapperTest {
             Assert.assertNotNull(list);
         }
     }
-
 }

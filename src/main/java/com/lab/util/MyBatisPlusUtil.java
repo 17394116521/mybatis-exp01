@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.MybatisXMLConfigBuilder;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.lab.mapper.EmpMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -42,5 +43,9 @@ public class MyBatisPlusUtil {
     // 获取SqlSession
     public static SqlSession openSession() {
         return factory.openSession();
+    }
+
+    public static EmpMapper getMapper(Class<EmpMapper> empMapperClass) {
+        return null;
     }
 }

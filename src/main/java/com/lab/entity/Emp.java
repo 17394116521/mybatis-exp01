@@ -24,7 +24,7 @@ public class Emp {
     private Date hireDate;
     private Integer status;
 
-    // ========= 多表关联新增字段【本次修改】 =========
+    // ========= 多表关联新增字段 =========
     private Integer deptId;                // 外键：部门编号
     private Department department;         // 多对一：员工对应的部门对象
 
@@ -102,7 +102,7 @@ public class Emp {
         this.department = department;
     }
 
-    // ====== 加分点：重写toString，打印多表关联结果，日志输出直观，实验报告可截图 ======
+    // ====== 优化点：重写toString，打印多表关联结果，日志输出直观 ======
     @Override
     public String toString() {
         return "Emp{" +
