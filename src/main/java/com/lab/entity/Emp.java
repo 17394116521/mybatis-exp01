@@ -4,15 +4,19 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 员工实体类
  * 单表CRUD + 多对一关联Department（员工所属部门）
+ * 实现Serializable：满足MyBatis二级缓存序列化要求
  */
 @TableName("emp")
-public class Emp {
+public class Emp implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO)
     private Integer empId;
@@ -35,6 +39,7 @@ public class Emp {
     public Integer getEmpId() {
         return empId;
     }
+
     public void setEmpId(Integer empId) {
         this.empId = empId;
     }
@@ -42,6 +47,7 @@ public class Emp {
     public String getEmpName() {
         return empName;
     }
+
     public void setEmpName(String empName) {
         this.empName = empName;
     }
@@ -49,6 +55,7 @@ public class Emp {
     public String getGender() {
         return gender;
     }
+
     public void setGender(String gender) {
         this.gender = gender;
     }
@@ -56,6 +63,7 @@ public class Emp {
     public String getDept() {
         return dept;
     }
+
     public void setDept(String dept) {
         this.dept = dept;
     }
@@ -63,6 +71,7 @@ public class Emp {
     public String getPost() {
         return post;
     }
+
     public void setPost(String post) {
         this.post = post;
     }
@@ -70,6 +79,7 @@ public class Emp {
     public BigDecimal getSalary() {
         return salary;
     }
+
     public void setSalary(BigDecimal salary) {
         this.salary = salary;
     }
@@ -77,6 +87,7 @@ public class Emp {
     public Date getHireDate() {
         return hireDate;
     }
+
     public void setHireDate(Date hireDate) {
         this.hireDate = hireDate;
     }
@@ -84,6 +95,7 @@ public class Emp {
     public Integer getStatus() {
         return status;
     }
+
     public void setStatus(Integer status) {
         this.status = status;
     }
@@ -91,6 +103,7 @@ public class Emp {
     public Integer getDeptId() {
         return deptId;
     }
+
     public void setDeptId(Integer deptId) {
         this.deptId = deptId;
     }
@@ -98,6 +111,7 @@ public class Emp {
     public Department getDepartment() {
         return department;
     }
+
     public void setDepartment(Department department) {
         this.department = department;
     }

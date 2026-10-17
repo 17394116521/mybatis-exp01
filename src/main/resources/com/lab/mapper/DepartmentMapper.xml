@@ -3,6 +3,10 @@
         "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.mapper.DepartmentMapper">
+
+    <!-- 开启Department Mapper二级缓存 -->
+    <cache eviction="LRU" size="1024" readOnly="false"/>
+
     <resultMap id="deptEmpMap" type="Department">
         <id column="dept_id" property="deptId"/>
         <result column="dept_name" property="deptName"/>
@@ -28,4 +32,5 @@
                  LEFT JOIN emp e ON d.dept_id = e.dept_id
         WHERE d.dept_id = #{deptId}
     </select>
+
 </mapper>

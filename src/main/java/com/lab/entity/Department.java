@@ -1,16 +1,21 @@
 package com.lab.entity;
 
+import java.io.Serializable;
 import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * 部门实体类，一对多关系：一个部门对应多个员工
- * 对应department表，MyBatis-Plus注解
+ * 对应department表，MyBatis‑Plus注解
+ * 实现Serializable：满足MyBatis二级缓存序列化要求
  */
 @TableName("department")
-public class Department {
+public class Department implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO) // 主键自增
     private Integer deptId;         //部门编号，主键
@@ -25,24 +30,31 @@ public class Department {
     public Integer getDeptId() {
         return deptId;
     }
+
     public void setDeptId(Integer deptId) {
         this.deptId = deptId;
     }
+
     public String getDeptName() {
         return deptName;
     }
+
     public void setDeptName(String deptName) {
         this.deptName = deptName;
     }
+
     public String getLocation() {
         return location;
     }
+
     public void setLocation(String location) {
         this.location = location;
     }
+
     public List<Emp> getEmpList() {
         return empList;
     }
+
     public void setEmpList(List<Emp> empList) {
         this.empList = empList;
     }

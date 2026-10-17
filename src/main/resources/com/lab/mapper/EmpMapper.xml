@@ -4,6 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.mapper.EmpMapper">
 
+    <!-- 开启本Mapper的二级缓存，LRU淘汰策略，最大缓存1024个对象，返回序列化拷贝 -->
+    <cache eviction="LRU" size="1024" readOnly="false"/>
+
     <!-- 自定义结果映射：解决字段名与属性名不一致 -->
     <resultMap id="empMap" type="Emp">
         <id property="empId" column="emp_id"/>
