@@ -15,12 +15,6 @@
         <package name="com.lab.entity"/>
     </typeAliases>
 
-    <!-- MP分页插件：无Spring环境下在此注册 -->
-    <plugins>
-        <plugin interceptor="com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor">
-            <property name="dialect" value="com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor"/>
-        </plugin>
-    </plugins>
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>

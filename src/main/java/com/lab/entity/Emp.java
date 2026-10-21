@@ -116,7 +116,6 @@ public class Emp implements Serializable {
         this.department = department;
     }
 
-    // ====== 优化点：重写toString，打印多表关联结果，日志输出直观 ======
     @Override
     public String toString() {
         return "Emp{" +

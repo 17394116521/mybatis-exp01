@@ -3,7 +3,7 @@ package com.lab.test;
 import com.lab.entity.Department;
 import com.lab.entity.Emp;
 import com.lab.mapper.DepartmentMapper;
-import com.lab.mapper.EmployeeMapper;
+import com.lab.mapper.EmpMapper;
 import com.lab.util.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
@@ -14,8 +14,9 @@ public class MultiTableTest {
     @Test
     public void testEmpAndDept(){
         try(SqlSession session = MyBatisUtil.openSession()){
-            EmployeeMapper mapper = session.getMapper(EmployeeMapper.class);
-            Emp emp = mapper.getEmpAndDeptById(2);
+            EmpMapper mapper = session.getMapper(EmpMapper.class);
+            // 和EmpMapper接口方法名保持一致：findEmpWithDeptById
+            Emp emp = mapper.findEmpWithDeptById(2);
             System.out.println(emp);
         }
     }

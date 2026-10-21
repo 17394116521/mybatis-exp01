@@ -9,8 +9,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * MyBatis-Plus分页插件单元测试
- * 任务4：验证分页插件、实体MP注解、分页查询
+ * 任务4：原生MyBatis手写LIMIT分页测试
+ * 说明：本项目无SpringBoot环境，不使用MyBatis‑Plus分页插件，采用手写LIMIT实现分页
  */
 public class MPaginationTest {
 
@@ -33,10 +33,13 @@ public class MPaginationTest {
             assertTrue(pageData.size() <= pageSize);
 
             //打印日志
-            System.out.println("====分页结果====");
+            System.out.println("==== 原生MyBatis LIMIT分页结果 ====");
             System.out.println("当前页："+pageNum);
             System.out.println("每页大小："+pageSize);
             System.out.println("总记录数："+total);
+            // 计算总页数
+            long totalPage = (total + pageSize -1) / pageSize;
+            System.out.println("总页数："+ totalPage);
             pageData.forEach(System.out::println);
         }
     }
